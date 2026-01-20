@@ -57,7 +57,8 @@
         .hero {
             background: linear-gradient(rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8)), url('images/hero-mission.jpg');
             background-size: cover;
-            background-position: center;
+            background-position: center center;
+            background-repeat: no-repeat;
             color: white;
             text-align: center;
             padding: 8rem 2rem;
@@ -144,7 +145,9 @@
             width: 100%;
             height: 300px;
             object-fit: cover;
+            object-position: top;
             display: block;
+            cursor: pointer;
         }
 
         .gallery-item .caption {
@@ -178,6 +181,7 @@
             width: 100%;
             height: 400px;
             object-fit: cover;
+            object-position: top;
             cursor: pointer;
         }
 
@@ -185,6 +189,35 @@
             padding: 1.5rem;
             text-align: center;
             font-weight: 500;
+        }
+
+        /* KIVA Gallery */
+        .kiva-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .kiva-item {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .kiva-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .kiva-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            cursor: pointer;
+            object-fit: contain;
+            object-position: top;
         }
 
         /* Table */
@@ -274,6 +307,57 @@
             scroll-behavior: smooth;
         }
 
+        /* Image Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            animation: zoomIn 0.3s;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #fff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.8); }
+            to { transform: scale(1); }
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
@@ -290,10 +374,43 @@
 
             .gallery {
                 grid-template-columns: 1fr;
+                gap: 1rem;
             }
 
             nav ul {
                 gap: 1rem;
+                padding: 0 1rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .intro {
+                padding: 1.5rem;
+            }
+
+            .contact-info {
+                padding: 1.5rem;
+            }
+
+            .financial-info {
+                padding: 1.5rem !important;
+            }
+
+            .letter-section {
+                gap: 1rem;
+            }
+
+            .modal-close {
+                top: 10px;
+                right: 20px;
+                font-size: 30px;
+            }
+
+            .letter-card .letter-sent-img {
+                object-fit: contain;
+                background-color: #f5f5f5;
             }
         }
     </style>
@@ -323,12 +440,12 @@
                 <h3>은혜나눔재단에 오신 것을 환영합니다</h3>
                 <p>
                     은혜나눔재단은 해외 저소득 지역의 아동들을 지원하는 비영리 선교단체입니다. 
-                    우리는 교육, 의료, 영양 지원을 통해 어려운 환경에 있는 아이들에게 희망과 
-                    기회를 제공하고 있습니다.
+                    우리는 교육지원을 통해 어려운 환경에 있는 아이들에게 희망과 기회를 제공하고
+                    생활지원을 통해 아이들의 자립을 지원하고 있습니다.
                 </p>
                 <p>
                     하나님의 사랑을 실천하며, 한 아이 한 아이의 삶을 변화시키는 것이 우리의 사명입니다. 
-                    후원자들의 관심과 기도, 그리고 후원금은 아이들의 미래를 밝게 만들어가는 소중한 
+                    후원자님들의 관심과 기도, 그리고 후원금은 아이들의 미래를 밝게 만들어가는 소중한 
                     자원이 됩니다.
                 </p>
                 <p>
@@ -383,7 +500,7 @@
             <h3 style="text-align: center; color: #764ba2; margin: 3rem 0 1rem 0; font-size: 1.5rem;">편지 교환</h3>
             <div class="letter-section">
                 <div class="letter-card">
-                    <img src="images/letter-sent-1.png" alt="보낸 편지" onclick="window.open('images/letter-sent-1.pdf', '_blank')">
+                    <img src="images/letter-sent-1.png" alt="보낸 편지" class="letter-sent-img">
                     <div class="caption">보낸 편지 (클릭하여 PDF 보기)</div>
                 </div>
                 <div class="letter-card">
@@ -410,64 +527,95 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td rowspan="5" style="font-weight: bold; vertical-align: top; padding-top: 1.5rem;">수입</td>
-                            <td>정기 후원금</td>
-                            <td style="text-align: right;">15,000,000</td>
-                            <td>월 50명 × 25,000원 × 12개월</td>
+                            <td rowspan="4" style="font-weight: bold; vertical-align: top; padding-top: 1.5rem;">수입</td>
+                            <td>사랑 후원</td>
+                            <td style="text-align: right;">1,200,000</td>
+                            <td>월 1명 × 100,000원 × 12개월</td>
                         </tr>
                         <tr>
-                            <td>일시 후원금</td>
-                            <td style="text-align: right;">8,500,000</td>
-                            <td>특별 모금</td>
+                            <td>소망 후원</td>
+                            <td style="text-align: right;">1,520,000</td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <td>기타 수입</td>
-                            <td style="text-align: right;">2,000,000</td>
-                            <td>이자 수입 등</td>
+                            <td>이자수입</td>
+                            <td style="text-align: right;">825</td>
+                            <td>이자수입은 소망 후원금으로 사용됩니다</td>
                         </tr>
                         <tr>
                             <td style="font-weight: bold;">수입 합계</td>
-                            <td style="text-align: right; font-weight: bold;">25,500,000</td>
+                            <td style="text-align: right; font-weight: bold;">2,720,825</td>
                             <td></td>
                         </tr>
                         <tr style="border-top: 2px solid #667eea;">
-                            <td rowspan="6" style="font-weight: bold; vertical-align: top; padding-top: 1.5rem;">지출</td>
-                            <td>아동 후원금</td>
-                            <td style="text-align: right;">12,000,000</td>
-                            <td>40명 × 25,000원 × 12개월</td>
-                        </tr>
-                        <tr>
-                            <td>교육 지원비</td>
-                            <td style="text-align: right;">4,500,000</td>
-                            <td>학용품, 교재 등</td>
-                        </tr>
-                        <tr>
-                            <td>의료 지원비</td>
-                            <td style="text-align: right;">3,200,000</td>
-                            <td>건강검진, 치료비</td>
-                        </tr>
-                        <tr>
-                            <td>영양 지원비</td>
-                            <td style="text-align: right;">2,800,000</td>
-                            <td>급식, 영양제</td>
-                        </tr>
-                        <tr>
-                            <td>운영비</td>
-                            <td style="text-align: right;">1,500,000</td>
-                            <td>사무실, 통신비 등</td>
+                            <td rowspan="2" style="font-weight: bold; vertical-align: top; padding-top: 1.5rem;">지출</td>
+                            <td>사랑 후원</td>
+                            <td style="text-align: right;">1,100,000</td>
+                            <td>귀마라스 산돌교회 학생 장학금 11회(2월 ~ 12월)</td>
                         </tr>
                         <tr>
                             <td style="font-weight: bold;">지출 합계</td>
-                            <td style="text-align: right; font-weight: bold;">24,000,000</td>
+                            <td style="text-align: right; font-weight: bold;">1,100,000</td>
+                            <td></td>
+                        </tr>
+                        <tr style="border-top: 2px solid #667eea; background-color: #e8f5e9;">
+                            <td rowspan="3" style="font-weight: bold; vertical-align: top; padding-top: 1.5rem;">잔액</td>
+                            <td>사랑 후원 잔액</td>
+                            <td style="text-align: right; font-weight: bold;">100,000</td>
                             <td></td>
                         </tr>
                         <tr style="background-color: #e8f5e9;">
-                            <td colspan="2" style="font-weight: bold; font-size: 1.1rem;">당기 순이익</td>
-                            <td style="text-align: right; font-weight: bold; font-size: 1.1rem;">1,500,000</td>
+                            <td>소망 후원 잔액</td>
+                            <td style="text-align: right; font-weight: bold;">1,520,825</td>
+                            <td></td>
+                        </tr>
+                        <tr style="background-color: #e8f5e9;">
+                            <td style="font-weight: bold; font-size: 1.1rem;">총 잔액</td>
+                            <td style="text-align: right; font-weight: bold; font-size: 1.1rem;">1,620,825</td>
                             <td></td>
                         </tr>
                     </tbody>
                 </table>
+            </div>
+            
+            <div class="financial-info" style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-top: 3rem;">
+                <h3 style="color: #764ba2; font-size: 1.5rem; margin-bottom: 2rem; text-align: center;">후원금 안내</h3>
+                
+                <div style="margin-bottom: 2.5rem;">
+                    <h4 style="color: #667eea; font-size: 1.3rem; margin-bottom: 1rem; font-weight: 600;">사랑 후원</h4>
+                    <p style="line-height: 1.8; margin-bottom: 0.8rem; margin-left: 1rem;">
+                        장학금 형태로 학생들에게 직접 전달되는 후원입니다.
+                    </p>
+                    <ul style="line-height: 2; margin-left: 2rem; list-style-type: disc;">
+                        <li>매월 학생 통학 및 교육비 지원</li>
+                        <li>후원자님께는 사랑 포인트 적립</li>
+                    </ul>
+                </div>
+                
+                <div style="margin-bottom: 2.5rem;">
+                    <h4 style="color: #667eea; font-size: 1.3rem; margin-bottom: 1rem; font-weight: 600;">믿음 후원</h4>
+                    <p style="line-height: 1.8; margin-bottom: 0.8rem; margin-left: 1rem;">
+                        학생들의 생활 자립을 위한 무이자 대출 후원입니다.
+                    </p>
+                    <ul style="line-height: 2; margin-left: 2rem; list-style-type: disc;">
+                        <li>사랑 후원을 받은 학생이 성인 되면 생활 자립 자금 대출 가능</li>
+                        <li>이자 없음, 상환 기간 자유 설정</li>
+                        <li>대출되지 않은 금액과 상환된 금액은 후원자님께서 필요하시면 돌려받으실 수 있습니다.</li>
+                        <li>후원자님께는 믿음 포인트 적립</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 style="color: #667eea; font-size: 1.3rem; margin-bottom: 1rem; font-weight: 600;">소망 후원</h4>
+                    <p style="line-height: 1.8; margin-bottom: 0.8rem; margin-left: 1rem;">
+                        재단 운영을 위한 제세 공과금 비용 후원입니다.<br>                        
+                    </p>
+                    <ul style="line-height: 2; margin-left: 2rem; list-style-type: disc;">
+                        <li>은혜나눔재단은 자비량 선교 단체로 운영</li>
+                        <li>후원금은 학생 지원 목적에만 사용되며, 인건비나 행사 경비 등 재단 운영비용으로는 사용되지 않습니다.</li>
+                        <li>후원자님께는 소망 포인트 적립</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
@@ -477,40 +625,39 @@
         <div class="container">
             <h2>운영 및 연락</h2>
             <div class="contact-info">
-                <h3>비전</h3>
-                <p>
-                    은혜나눔재단은 하나님의 사랑을 실천하여 해외 저소득 지역의 아동들이 
-                    건강하게 자라나고 교육의 기회를 누릴 수 있도록 지원합니다. 
-                    우리는 한 아이 한 아이의 삶을 변화시켜 더 나은 미래를 만들어가고자 합니다.
+                <h3>은혜나눔재단의 비전</h3>
+                <p style="font-size: 1.2rem; font-weight: 600; color: #667eea; margin-bottom: 1.5rem; text-align: center; font-style: italic;">
+                    "받은 은혜를 나누고, 나눔의 선순환을 이루는 글로벌 영향력"
+                </p>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">
+                    우리가 받은 하나님의 은혜를 필리핀을 비롯한 해외 저소득 아동들에게 먼저 나누고,
+                    그 아이들이 성장하여 또 다른 이웃에게 은혜를 전하는 나눔의 선순환을 이루며,
+                    이러한 선한 영향력이 세상을 넘어 널리 퍼져가는 것이 은혜나눔재단의 비전입니다.
+                </p>
+                <p style="line-height: 1.8; margin-top: 1rem; font-size: 1.1rem; color: #555;">
+                    작은 씨앗 하나가 숲을 이루듯, 한 사람의 나눔이 세대를 이어가는 변화를 만듭니다. 🌱✨
                 </p>
 
                 <h3>연락처</h3>
-                <p><strong>주소:</strong> 서울특별시 강남구 테헤란로 123</p>
-                <p><strong>전화:</strong> 02-1234-5678</p>
-                <p><strong>이메일:</strong> info@grace-nanum.org</p>
-                <p><strong>운영시간:</strong> 평일 09:00 - 18:00</p>
+                <p><strong>이메일:</strong> ehnnfdn@gmail.com</p>
+            </div>
+        </div>
+    </section>
 
-                <h3>후원 안내</h3>
-                <p><strong>정기 후원</strong></p>
-                <ul>
-                    <li>월 25,000원 이상 정기 후원 가능</li>
-                    <li>후원금은 아동 교육, 의료, 영양 지원에 사용됩니다</li>
-                    <li>후원자에게는 정기적으로 후원 아동의 소식과 사진을 전달합니다</li>
-                </ul>
-                <p style="margin-top: 1rem;"><strong>일시 후원</strong></p>
-                <ul>
-                    <li>원하시는 금액으로 일시 후원 가능</li>
-                    <li>특별 프로젝트나 긴급 지원에 활용됩니다</li>
-                </ul>
-                <p style="margin-top: 1rem;"><strong>후원 계좌</strong></p>
-                <ul>
-                    <li>은행명: 우리은행</li>
-                    <li>계좌번호: 1002-123-456789</li>
-                    <li>예금주: (사)은혜나눔재단</li>
-                </ul>
-                <p style="margin-top: 1rem; color: #667eea; font-weight: bold;">
-                    후원 시 입금자명을 남겨주시면 후원금 영수증을 발급해드립니다.
-                </p>
+    <!-- KIVA 성공사례 Section -->
+    <section id="kiva">
+        <div class="container">
+            <h2>기부에서 투자로, 기부의 개념을 바꾼 키바(KIVA)</h2>
+            <div class="kiva-gallery" style="margin-top: 2rem;">
+                <div class="kiva-item">
+                    <img src="images/kiva1.png" alt="키바 소개 1">
+                </div>
+                <div class="kiva-item">
+                    <img src="images/kiva2.png" alt="키바 소개 2">
+                </div>
+                <div class="kiva-item">
+                    <img src="images/kiva3.png" alt="키바 소개 3">
+                </div>
             </div>
         </div>
     </section>
@@ -520,6 +667,12 @@
         <p>&copy; 2025 은혜나눔재단. All rights reserved.</p>
         <p style="margin-top: 0.5rem; font-size: 0.9rem;">해외 저소득 아동 지원을 통한 사랑의 실천</p>
     </footer>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImage" src="" alt="확대 이미지">
+    </div>
 
     <script>
         // Smooth scroll for navigation links
@@ -534,6 +687,49 @@
                     });
                 }
             });
+        });
+
+        // Image modal functionality
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const closeBtn = document.querySelector('.modal-close');
+
+        // 모든 갤러리 이미지에 클릭 이벤트 추가 (보낸 편지 제외)
+        document.querySelectorAll('.gallery-item img, .letter-card img, .kiva-item img').forEach(img => {
+            img.addEventListener('click', function(e) {
+                // 보낸 편지는 PDF를 열어야 하므로 제외
+                if (this.src.includes('letter-sent-1.png')) {
+                    window.open('images/letter-sent-1.pdf', '_blank');
+                    return;
+                }
+                
+                modal.classList.add('active');
+                modalImg.src = this.src;
+                modalImg.alt = this.alt;
+                document.body.style.overflow = 'hidden'; // 스크롤 방지
+            });
+        });
+
+        // 모달 닫기
+        closeBtn.addEventListener('click', function() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        // 모달 배경 클릭 시 닫기
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // ESC 키로 모달 닫기
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
         });
     </script>
 </body>
